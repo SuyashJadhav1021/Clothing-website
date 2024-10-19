@@ -13,6 +13,7 @@ import PlaceOrder from "./Pages/PlaceOrder";
 import Order from "./Pages/Order";
 import AboutUs from "./Pages/AboutUs";
 import ContactUs from "./Pages/ContactUs";
+import Verify from "./Pages/Verify";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
           <Route path="/orders" element={<Order />} />
           <Route path="/about-us" element={<AboutUs />} />
           <Route path="/contact-us" element={<ContactUs />} />
+          <Route path="/verify" element={<Verify />} />
         </Routes>
         <Footer />
       </div>

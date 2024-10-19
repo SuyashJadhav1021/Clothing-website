@@ -8,7 +8,7 @@ function LatestCollection() {
 
   useEffect(() => {
     setLatestCollection(products.slice(0, 10));
-  }, []);
+  }, [products]);
   return (
     <div className="flex flex-col items-center my-4 font-style">
       <div id="popular-heading" className="my-3">
@@ -25,7 +25,7 @@ function LatestCollection() {
             <Item
               key={i}
               id={item._id}
-              image={item.image[0]}
+              image={item.images[0]}
               name={item.name}
               price={item.price}
             />

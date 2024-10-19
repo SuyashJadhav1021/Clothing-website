@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { products } from "../assets/frontend_assets/assets";
+import axios from "axios";
 import { toast } from "react-toastify";
 
 export const shopContext = createContext(null);
@@ -7,9 +7,32 @@ export const shopContext = createContext(null);
 const ShopContextProvider = ({ children }) => {
   const [search, setSearch] = useState("");
   const [showSearch, setShowSearch] = useState(false);
+  const [products, setProducts] = useState([]);
   const [cartData, setCartData] = useState({});
+  const [token, setToken] = useState("");
   const [menu, setMenu] = useState("");
+
   const shipping_fee = 10;
+
+  const fetchProducts = async () => {
+    try {
+      const res = await axios.get(
+        process.env.REACT_APP_BACKENDURL + "/api/product/all"
+      );
+      if (res.data.success) {
+        setProducts(res.data.products);
+      } else {
+        toast.error(res.data.msg);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
 
   const addToCart = async (prodId, size) => {
     if (!size) {
@@ -29,6 +52,18 @@ const ShopContextProvider = ({ children }) => {
       cartItems[prodId][size] = 1;
     }
     setCartData(cartItems);
+    if (token) {
+      try {
+        await axios.post(
+          process.env.REACT_APP_BACKENDURL + "/api/cart/add",
+          { itemId: prodId, size },
+          { headers: { token } }
+        );
+      } catch (error) {
+        console.log(error);
+        toast.error(error.message);
+      }
+    }
   };
 
   const getCartCount = () => {
@@ -45,11 +80,23 @@ const ShopContextProvider = ({ children }) => {
     return totalCount;
   };
 
-  const updateCart = (itemId, size, quantity) => {
+  const updateCart = async (itemId, size, quantity) => {
     let cartItems = structuredClone(cartData);
 
     cartItems[itemId][size] = quantity;
     setCartData(cartItems);
+    if (token) {
+      try {
+        await axios.post(
+          process.env.REACT_APP_BACKENDURL + "/api/cart/update",
+          { itemId, size, quantity },
+          { headers: { token } }
+        );
+      } catch (error) {
+        console.log(error);
+        toast.error(error.message);
+      }
+    }
   };
 
   const totalCart = () => {
@@ -67,6 +114,29 @@ const ShopContextProvider = ({ children }) => {
     return totalAmount;
   };
 
+  useEffect(() => {
+    if (!token && localStorage.getItem("token")) {
+      setToken(localStorage.getItem("token"));
+      getUserCart(localStorage.getItem("token"));
+    }
+  }, []);
+
+  const getUserCart = async (token) => {
+    try {
+      const res = await axios.post(
+        process.env.REACT_APP_BACKENDURL + "/api/cart/get",
+        {},
+        { headers: { token } }
+      );
+      if (res.data.success) {
+        setCartData(res.data.cartData);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
+    }
+  };
+
   const contextValue = {
     products,
     search,
@@ -81,6 +151,9 @@ const ShopContextProvider = ({ children }) => {
     shipping_fee,
     menu,
     setMenu,
+    token,
+    setToken,
+    setCartData,
   };
 
   return (

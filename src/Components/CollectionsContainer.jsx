@@ -70,11 +70,7 @@ function CollectionsContainer() {
 
   useEffect(() => {
     applyFilter();
-  }, [category, subCategory]);
-
-  useEffect(() => {
-    applyFilter();
-  }, [search]);
+  }, [category, subCategory, search, products]);
 
   return (
     <div className="flex flex-col text-black lg:flex-row lg:gap-5">
@@ -162,7 +158,7 @@ function CollectionsContainer() {
               <Item
                 key={i}
                 id={item._id}
-                image={item.image[0]}
+                image={item.images[0]}
                 name={item.name}
                 price={item.price}
               />

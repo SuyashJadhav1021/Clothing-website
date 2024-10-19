@@ -35,7 +35,7 @@ function RelatedProducts({ category, subcategory }) {
             <Item
               key={i}
               id={item._id}
-              image={item.image[0]}
+              image={item.images[0]}
               name={item.name}
               price={item.price}
             />

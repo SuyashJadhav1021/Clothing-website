@@ -18,7 +18,7 @@ function Product() {
     products.map((item) => {
       if (item._id === id) {
         setProductData(item);
-        setImage(item.image[0]);
+        setImage(item.images[0]);
         return null;
       }
     });
@@ -36,7 +36,7 @@ function Product() {
             id="img-list"
             className="w-[10%] h-full flex flex-col gap-2 lg:w-[90px]"
           >
-            {productData.image.map((item, index) => {
+            {productData.images.map((item, index) => {
               return (
                 <img
                   src={item}

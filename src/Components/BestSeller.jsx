@@ -5,11 +5,13 @@ import { shopContext } from "../Context/context";
 
 function BestSeller() {
   const { products } = useContext(shopContext);
+
   const [bestProducts, setBestProducts] = useState([]);
+
   useEffect(() => {
     const product = products.filter((item) => item.bestseller);
     setBestProducts(product.slice(0, 5));
-  }, []);
+  }, [products]);
   return (
     <div className="flex flex-col items-center my-4 font-body w-[80vw] mx-auto">
       <div id="newCol-heading" className="my-3">
@@ -26,7 +28,7 @@ function BestSeller() {
             <Item
               key={i}
               id={item._id}
-              image={item.image[0]}
+              image={item.images[0]}
               name={item.name}
               price={item.price}
             />

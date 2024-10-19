@@ -10,21 +10,23 @@ function Cart() {
   const [cartItems, setCartItems] = useState([]);
 
   useEffect(() => {
-    let tempData = [];
+    if (products.length > 0) {
+      let tempData = [];
 
-    for (const items in cartData) {
-      for (const item in cartData[items]) {
-        if (cartData[items][item] > 0) {
-          tempData.push({
-            _id: items,
-            size: item,
-            quantity: cartData[items][item],
-          });
+      for (const items in cartData) {
+        for (const item in cartData[items]) {
+          if (cartData[items][item] > 0) {
+            tempData.push({
+              _id: items,
+              size: item,
+              quantity: cartData[items][item],
+            });
+          }
         }
       }
+      setCartItems(tempData);
     }
-    setCartItems(tempData);
-  }, [cartData]);
+  }, [cartData, products]);
 
   return (
     <div className="lg:py-24 font-style w-[80vw] mx-auto">
@@ -33,7 +35,11 @@ function Cart() {
         return (
           <div className="py-4 border-t border-b text-gray-700 grid grid-cols-[4fr_0.5fr_0.5fr] sm:grid-cols-[4fr_2fr_0.5fr] items-center gap-4">
             <div className="flex items-start gap-6">
-              <img src={productData.image[0]} alt="" className="w-16 sm:w-20" />
+              <img
+                src={productData.images[0]}
+                alt=""
+                className="w-16 sm:w-20"
+              />
               <div>
                 <p className="text-xs sm:text-lg font-medium">
                   {productData.name}
